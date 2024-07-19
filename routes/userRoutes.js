@@ -22,7 +22,7 @@ const router = express.Router();
 router.get("/", homePage);
 
 // POST /user
-router.get("/user", isAuthenticated, currentUser);
+router.post("/user", isAuthenticated, currentUser);
 
 // POST /user/signup
 router.post("/user/signup", userSignup);
