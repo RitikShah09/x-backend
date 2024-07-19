@@ -16,6 +16,9 @@ exports.createPost = catchAsyncErrors(async (req, res, next) => {
   const user = await User.findById(req.id);
   const file = req.files.post;
   const text = req.body.text;
+  if(!req.files.post){
+    return next(new ErrorHandler("Post Not Found!"))
+  }
   console.log(file)
   const modifiedFileName = `Post-${Date.now}${path.extname(file.name)}`;
   const { fileId, url } = await imageKit.upload({
@@ -44,6 +47,19 @@ exports.allPost = catchAsyncErrors(async (req, res, next) => {
   res.status(200).json({
     success: true,
     allPosts,
+  });
+});
+
+exports.savedPost = catchAsyncErrors(async (req, res, next) => {
+  const { savedPost } = await User.findById(req.id).populate({
+    path: "savedPost",
+    populate: {
+      path: "userid",
+    },
+  });;
+  res.status(200).json({
+    success: true,
+    posts:savedPost,
   });
 });
 
